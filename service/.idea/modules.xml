@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/beeter-service.iml" filepath="$PROJECT_DIR$/beeter-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/grouptalk-service.iml" filepath="$PROJECT_DIR$/grouptalk-service.iml" />
     </modules>
   </component>
 </project>
