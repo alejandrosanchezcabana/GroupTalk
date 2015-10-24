@@ -13,8 +13,6 @@ public class GroupsCollection {
 
     @InjectLinks({})
     private List<Link> links;
-    private long newestTimestamp;
-    private long oldestTimestamp;
     private List<Groups> groups = new ArrayList<>();
 
     public List<Link> getLinks() {
@@ -25,27 +23,11 @@ public class GroupsCollection {
         this.links = links;
     }
 
-    public long getNewestTimestamp() {
-        return newestTimestamp;
-    }
-
-    public void setNewestTimestamp(long newestTimestamp) {
-        this.newestTimestamp = newestTimestamp;
-    }
-
-    public long getOldestTimestamp() {
-        return oldestTimestamp;
-    }
-
-    public void setOldestTimestamp(long oldestTimestamp) {
-        this.oldestTimestamp = oldestTimestamp;
-    }
-
-    public List<Groups> getStings() {
+    public List<Groups> getGroups() {
         return groups;
     }
 
-    public void setStings(List<Groups> stings) {
+    public void setGroups(List<Groups> groups) {
         this.groups = groups;
     }
 }

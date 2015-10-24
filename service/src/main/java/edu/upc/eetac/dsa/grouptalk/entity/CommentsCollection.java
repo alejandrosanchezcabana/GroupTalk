@@ -28,7 +28,7 @@ public class CommentsCollection {
         return newestTimestamp;
     }
 
-    public void setNewestTimestamp(long newestTimestamp) {
+    public static void setNewestTimestamp(long newestTimestamp) {
         this.newestTimestamp = newestTimestamp;
     }
 
