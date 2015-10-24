@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.grouptalk.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
@@ -9,6 +10,8 @@ import java.util.List;
 /**
  * Created by Alex on 21/10/15.
  */
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentsCollection {
     @InjectLinks({})
     private List<Link> links;
@@ -28,7 +31,7 @@ public class CommentsCollection {
         return newestTimestamp;
     }
 
-    public static void setNewestTimestamp(long newestTimestamp) {
+    public void setNewestTimestamp(long newestTimestamp) {
         this.newestTimestamp = newestTimestamp;
     }
 

@@ -81,7 +81,7 @@ public class CommentsDAOImpl implements CommentsDAO {
 
     @Override
     public CommentsCollection getComment() throws SQLException {
-        CommentsCollection stingCollection = new CommentsCollection();
+        CommentsCollection commentsCollection = new CommentsCollection();
 
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -102,11 +102,11 @@ public class CommentsDAOImpl implements CommentsDAO {
                 comments.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 comments.setLastModified(rs.getTimestamp("last_modified").getTime());
                 if (first) {
-                    CommentsCollection.setNewestTimestamp(comments.getLastModified());
+                    commentsCollection.setNewestTimestamp(comments.getLastModified());
                     first = false;
                 }
-                stingCollection.setOldestTimestamp(comments.getLastModified());
-                stingCollection.getComments().add(comments);
+                commentsCollection.setOldestTimestamp(comments.getLastModified());
+                commentsCollection.getComments().add(comments);
             }
         } catch (SQLException e) {
             throw e;
@@ -114,7 +114,7 @@ public class CommentsDAOImpl implements CommentsDAO {
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
-        return stingCollection;
+        return commentsCollection;
     }
 
     @Override
