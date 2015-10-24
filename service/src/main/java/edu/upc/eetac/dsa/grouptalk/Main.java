@@ -34,13 +34,12 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in edu.upc.eetac.dsa.grouptalk package
-        final ResourceConfig rc = new ResourceConfig().packages("edu.upc.eetac.dsa.grouptalk");
+        final ResourceConfig rc = new GroupTalkResourceConfig();
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(getBaseURI()), rc);
     }
-
     /**
      * Main method.
      * @param args
