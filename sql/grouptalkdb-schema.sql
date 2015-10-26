@@ -53,4 +53,3 @@ CREATE TABLE added_groups(
     FOREIGN KEY (groupid) REFERENCES groups (id) on delete cascade,
     PRIMARY KEY (userid, groupid)
 );
-

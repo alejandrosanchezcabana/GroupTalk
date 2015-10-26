@@ -11,7 +11,7 @@ import edu.upc.eetac.dsa.grouptalk.entity.GroupsCollection;
 public class GroupDAOImpl implements GroupDAO {
 
     @Override
-    public Groups createGroup(String userid, String theme, String description) throws SQLException {
+    public Groups createGroup(String theme, String description) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -24,6 +24,8 @@ public class GroupDAOImpl implements GroupDAO {
                 id = rs.getString(1);
             else
                 throw new SQLException();
+            connection.close();
+            connection = Database.getConnection();
 
             stmt = connection.prepareStatement(GroupDAOQuery.CREATE_GROUP);
             stmt.setString(1, id);
@@ -42,10 +44,9 @@ public class GroupDAOImpl implements GroupDAO {
         return getGroupById(id);
     }
 
-
     @Override
     public GroupsCollection getGroups() throws SQLException {
-        GroupsCollection stingCollection = new GroupsCollection();
+        GroupsCollection groupsCollection = new GroupsCollection();
 
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -56,10 +57,11 @@ public class GroupDAOImpl implements GroupDAO {
             ResultSet rs = stmt.executeQuery();
             boolean first = true;
             while (rs.next()) {
-                Groups sting = new Groups();
-                sting.setId(rs.getString("id"));
-                sting.settheme(rs.getString("theme"));
-                stingCollection.getGroups().add(sting);
+                Groups groups = new Groups();
+                //groups.setId(rs.getString("id"));
+                groups.setTheme(rs.getString("theme"));
+                groups.setDescription(rs.getString("description"));
+                groupsCollection.getGroups().add(groups);
             }
         } catch (SQLException e) {
             throw e;
@@ -67,12 +69,12 @@ public class GroupDAOImpl implements GroupDAO {
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
-        return stingCollection;
+        return groupsCollection;
     }
 
     @Override
     public Groups updateGroup(String id, String theme, String description) throws SQLException {
-        Groups sting = null;
+        Groups groups = null;
 
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -80,13 +82,13 @@ public class GroupDAOImpl implements GroupDAO {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(GroupDAOQuery.UPDATE_GROUP);
-            stmt.setString(1, theme);
-            stmt.setString(2, description);
-            stmt.setString(3, id);
+            stmt.setString(1, description);
+            stmt.setString(2, id);
+            //stmt.setString(3, description);
 
             int rows = stmt.executeUpdate();
             if (rows == 1)
-                sting = getGroupById(id);
+                groups = getGroupById(id);
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -94,7 +96,7 @@ public class GroupDAOImpl implements GroupDAO {
             if (connection != null) connection.close();
         }
 
-        return sting;
+        return groups;
     }
 
     @Override
@@ -133,7 +135,7 @@ public class GroupDAOImpl implements GroupDAO {
             if (rs.next()) {
                 groups = new Groups();
                 groups.setId(rs.getString("id"));
-                groups.settheme(rs.getString("theme"));
+                groups.setTheme(rs.getString("theme"));
                 groups.setDescription(rs.getString("description"));
             }
         } catch (SQLException e) {

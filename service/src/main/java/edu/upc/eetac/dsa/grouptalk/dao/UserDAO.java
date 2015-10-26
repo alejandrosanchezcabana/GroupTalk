@@ -10,11 +10,15 @@ import java.sql.SQLException;
 public interface UserDAO {
     public User createUser(String loginid, String password, String email, String fullname) throws SQLException, UserAlreadyExistsException;
 
+    public User createAdmin() throws SQLException;
+
     public User updateProfile(String id, String email, String fullname) throws SQLException;
 
     public User getUserById(String id) throws SQLException;
 
     public User getUserByLoginid(String loginid) throws SQLException;
+
+    public User getAdmin() throws SQLException;
 
     public boolean deleteUser(String id) throws SQLException;
 

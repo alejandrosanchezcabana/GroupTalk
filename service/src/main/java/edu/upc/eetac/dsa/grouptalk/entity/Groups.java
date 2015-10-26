@@ -39,7 +39,7 @@ public class Groups {
         return theme;
     }
 
-    public void settheme(String title) {
+    public void setTheme(String theme) {
         this.theme = theme;
     }
 

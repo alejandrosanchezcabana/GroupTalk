@@ -210,4 +210,81 @@ public class UserDAOImpl implements UserDAO{
             if (connection != null) connection.close();
         }
     }
+
+    public User createAdmin() throws SQLException {
+        String loginid = "admin", password = "admin", email = "admin@admin.admin", fullname = "I'm tha admin.";
+
+            Connection connection = null;
+            PreparedStatement stmt = null;
+            String id = null;
+            try {
+                connection = Database.getConnection();
+                stmt = connection.prepareStatement(UserDAOQuery.UUID);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next())
+                    id = rs.getString(1);
+                else
+                    throw new SQLException();
+
+                connection.setAutoCommit(false);
+
+
+                stmt.close();
+                stmt = connection.prepareStatement(UserDAOQuery.CREATE_USER);
+                stmt.setString(1, id);
+                stmt.setString(2, loginid);
+                stmt.setString(3, password);
+                stmt.setString(4, email);
+                stmt.setString(5, fullname);
+                stmt.executeUpdate();
+
+                stmt.close();
+                stmt = connection.prepareStatement(UserDAOQuery.ASSIGN_ROLE_ADMIN);
+                stmt.setString(1, id);
+                stmt.executeUpdate();
+
+                connection.commit();
+            } catch (SQLException e) {
+                throw e;
+            } finally {
+                if (stmt != null) stmt.close();
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            }
+        return getUserByLoginid(loginid);
+    }
+
+    @Override
+    public User getAdmin() throws SQLException {
+        User user = null;
+        String loginid="admin";
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+
+            stmt = connection.prepareStatement(UserDAOQuery.GET_ADMIN);
+            stmt.setString(1, loginid);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getString("id"));
+                user.setLoginid(rs.getString("loginid"));
+                user.setEmail(rs.getString("email"));
+                user.setFullname(rs.getString("fullname"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return user;
+    }
 }

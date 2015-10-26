@@ -1,0 +1,3 @@
+insert into users (id, loginid, password, email, fullname) values (id, "admin", "admin", "admin@admin", "Admin");
+insert into user_roles (userid, role) values (userid, "admin");
+insert into auth_tokens (userid, token) values (userid, token);
