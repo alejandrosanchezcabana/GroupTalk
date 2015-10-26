@@ -10,4 +10,5 @@ public class CommentsDAOQuery {
     public final static String GET_COMMENTS = "select hex(id) as id, hex(creator) as creator, title, creation_timestamp, last_modified from comments";
     public final static String UPDATE_COMMENT = "update comments set comment=? where id=unhex(?) ";
     public final static String DELETE_COMMENT = "delete from comments where id=unhex(?)";
+    public final static String ASSIGN_ADDED_GROUPS = "insert into added_groups (userid, groupid) values (UNHEX(?), UNHEX(?))";
 }

@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.grouptalk;
 
+import edu.upc.eetac.dsa.grouptalk.entity.AuthToken;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
