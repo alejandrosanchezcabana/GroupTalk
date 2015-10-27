@@ -10,8 +10,8 @@ import java.sql.SQLException;
  */
 public interface CommentsDAO {
     public Comments createComment(String creator, String groupid, String title, String comment) throws SQLException;
-    public Comments getCommentById(String id) throws SQLException;
-    public CommentsCollection getComment() throws SQLException;
-    public Comments updateComment(String id, String comment) throws SQLException;
-    public boolean deleteComment(String id) throws SQLException;
+    public Comments getCommentById(String id, String groupid) throws SQLException;
+    public CommentsCollection getComments() throws SQLException;
+    public Comments updateComment(String id, String groupid, String comment) throws SQLException;
+    public boolean deleteComment(String id, String groupid) throws SQLException;
 }

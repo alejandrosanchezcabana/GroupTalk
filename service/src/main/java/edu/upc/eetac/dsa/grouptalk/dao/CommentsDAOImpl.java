@@ -16,12 +16,13 @@ public class CommentsDAOImpl implements CommentsDAO {
     @Override
     public Comments createComment(String creator, String groupid, String title, String comment) throws SQLException {
         Connection connection = null;
-        PreparedStatement stmt = null;
+        PreparedStatement stmt=null, stmt2 = null;
         String id = null;
         try {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(UserDAOQuery.UUID);
+            stmt2 =connection.prepareStatement(CommentsDAOQuery.ASSIGN_ADDED_GROUPS);
             ResultSet rs = stmt.executeQuery();
             if (rs.next())
                 id = rs.getString(1);
@@ -30,25 +31,35 @@ public class CommentsDAOImpl implements CommentsDAO {
 
             stmt = connection.prepareStatement(CommentsDAOQuery.CREATE_COMMENT);
             stmt.setString(1, id);
-            stmt.setString(2, groupid);
-            stmt.setString(3, creator);
+            stmt.setString(2, creator);
+            stmt.setString(3, groupid);
             stmt.setString(4, title);
             stmt.setString(5, comment);
             stmt.executeUpdate();
+
+
+            stmt2 = connection.prepareStatement(CommentsDAOQuery.ASSIGN_ADDED_GROUPS);
+            stmt2.setString(1, creator);
+            stmt2.setString(2, groupid);
+            stmt2.executeUpdate();
+            stmt2.close();
         } catch (SQLException e) {
             throw e;
         } finally {
-            if (stmt != null) stmt.close();
+            if (stmt != null || stmt2!= null) {
+                stmt.close();
+                stmt2.close();
+            }
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
             }
         }
-        return getCommentById(id);
+        return getCommentById(id, groupid);
     }
 
     @Override
-    public Comments getCommentById(String id) throws SQLException {
+    public Comments getCommentById(String id, String groupid) throws SQLException {
         Comments comments = null;
 
         Connection connection = null;
@@ -58,12 +69,13 @@ public class CommentsDAOImpl implements CommentsDAO {
 
             stmt = connection.prepareStatement(CommentsDAOQuery.GET_COMMENT_BY_ID);
             stmt.setString(1, id);
+            stmt.setString(2, groupid);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 comments = new Comments();
                 comments.setId(rs.getString("id"));
-                comments.setGroup(rs.getString("group"));
+                comments.setGroupid(rs.getString("groupid"));
                 comments.setCreator(rs.getString("creator"));
                 comments.setTitle(rs.getString("title"));
                 comments.setComment(rs.getString("comment"));
@@ -80,7 +92,7 @@ public class CommentsDAOImpl implements CommentsDAO {
     }
 
     @Override
-    public CommentsCollection getComment() throws SQLException {
+    public CommentsCollection getComments() throws SQLException {
         CommentsCollection commentsCollection = new CommentsCollection();
 
         Connection connection = null;
@@ -95,7 +107,7 @@ public class CommentsDAOImpl implements CommentsDAO {
                 Comments comments = new Comments();
                 comments = new Comments();
                 comments.setId(rs.getString("id"));
-                comments.setGroup(rs.getString("group"));
+                comments.setGroupid(rs.getString("groupid"));
                 comments.setCreator(rs.getString("creator"));
                 comments.setTitle(rs.getString("title"));
                 comments.setComment(rs.getString("comment"));
@@ -118,7 +130,7 @@ public class CommentsDAOImpl implements CommentsDAO {
     }
 
     @Override
-    public Comments updateComment(String id, String comment) throws SQLException {
+    public Comments updateComment(String id, String groupid, String comment) throws SQLException {
         Comments comments = null;
 
         Connection connection = null;
@@ -127,12 +139,12 @@ public class CommentsDAOImpl implements CommentsDAO {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(CommentsDAOQuery.UPDATE_COMMENT);
-            stmt.setString(1, comment);
-            stmt.setString(2, id);
+            stmt.setString(1, id);
+            stmt.setString(3, comment);
 
             int rows = stmt.executeUpdate();
             if (rows == 1)
-                comments = getCommentById(id);
+                comments = getCommentById(id, groupid);
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -144,7 +156,7 @@ public class CommentsDAOImpl implements CommentsDAO {
     }
 
     @Override
-    public boolean deleteComment(String id) throws SQLException {
+    public boolean deleteComment(String id, String groupid) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         try {

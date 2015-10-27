@@ -17,7 +17,7 @@ public class Comments {
     private String title;
     private String creator;
     private String comment;
-    private String group;
+    private String groupid;
     private long creationTimestamp;
     private long lastModified;
 
@@ -61,12 +61,12 @@ public class Comments {
         this.comment = comment;
     }
 
-    public String getGroup() {
-        return group;
+    public String getGroupid() {
+        return groupid;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
     }
 
     public long getCreationTimestamp() {
